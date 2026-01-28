@@ -1,0 +1,225 @@
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  text-align: left;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-h, #111);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text, #555);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-row select {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  background: var(--bg, #fff);
+  color: var(--text-h, #111);
+  max-width: 240px;
+}
+
+.form-row select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--text, #666);
+}
+
+.form-row textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-row textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn {
+  align-self: flex-start;
+  padding: 0.6rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent, #6366f1);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--accent-secondary, #10b981);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--accent-secondary-hover, #059669);
+}
+
+.error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.output {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border, #e5e5e5);
+}
+
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.output h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--text-h, #111);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ruby-block {
+  font-size: 1.25rem;
+  line-height: 2.2;
+  letter-spacing: 0.02em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.ruby-block ruby {
+  ruby-position: over;
+  ruby-align: center;
+}
+
+.ruby-block rt {
+  font-size: 0.6em;
+  font-weight: 400;
+  opacity: 0.85;
+  user-select: none;
+}
+
+/* 打印样式 */
+@media print {
+  .app {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .header,
+  .form,
+  .error,
+  .output-header,
+  .action-buttons {
+    display: none;
+  }
+
+  .output {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .ruby-block {
+    font-size: 14pt;
+    line-height: 1.8;
+  }
+
+  .ruby-block rt {
+    font-size: 0.6em;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 1.25rem 1rem;
+  }
+
+  .output-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-buttons {
+    width: 100%;
+  }
+
+  .btn-secondary {
+    flex: 1;
+  }
+
+  .ruby-block {
+    font-size: 1.1rem;
+  }
+
+  .ruby-block rt {
+    font-size: 0.55em;
+  }
+}
