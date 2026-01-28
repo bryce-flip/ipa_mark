@@ -60,4 +60,4 @@ curl -s -X POST http://localhost:3001/api/annotate -H "Content-Type: application
 ## 音标库
 
 仅使用项目内 `json/` 下的音标文件，不支持未登录词或外部服务。
-# ipa_mark
+
