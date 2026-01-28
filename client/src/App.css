@@ -53,6 +53,59 @@
   cursor: not-allowed;
 }
 
+.lookup-row .lookup-inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.lookup-input {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  min-width: 160px;
+  max-width: 280px;
+}
+
+.lookup-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-lookup {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+}
+
+.lookup-result {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.lookup-ruby {
+  ruby-position: over;
+  ruby-align: center;
+}
+
+.lookup-ruby rt {
+  font-size: 0.65em;
+  opacity: 0.9;
+}
+
+.lookup-not-found {
+  color: var(--text, #666);
+  font-style: italic;
+}
+
+.lookup-error {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #b91c1c;
+}
+
 .hint {
   font-size: 0.9rem;
   color: var(--text, #666);

@@ -45,11 +45,26 @@ export function getDict(lang) {
   const useLower = LOWER_LANGS.has(lang);
   for (const [key, val] of Object.entries(arr)) {
     if (typeof val !== "string") continue;
+    // 多音标词条（如 "/ˈwɪð/, /ˈwɪθ/"）只取第一条，避免一个词显示多个标记
+    const ipa = val.includes(", ") ? val.split(", ")[0].trim() : val;
     const k = useLower ? key.toLowerCase() : key;
-    map.set(k, val);
+    map.set(k, ipa);
     if (key.length > maxKeyLen) maxKeyLen = key.length;
   }
   const out = { map, maxKeyLen };
   cache.set(lang, out);
   return out;
+}
+
+/**
+ * 查询单个词在指定语言下的 IPA 音标。
+ * @param {string} lang
+ * @param {string} word
+ * @returns {string|null} 音标字符串或 null（未找到）
+ */
+export function getIpa(lang, word) {
+  if (typeof word !== "string" || !word.trim()) return null;
+  const { map } = getDict(lang);
+  const key = LOWER_LANGS.has(lang) ? word.trim().toLowerCase() : word.trim();
+  return map.get(key) ?? null;
 }

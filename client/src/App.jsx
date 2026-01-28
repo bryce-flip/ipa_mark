@@ -12,6 +12,10 @@ export default function App() {
   const [error, setError] = useState("");
   const [languagesFetched, setLanguagesFetched] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [lookupWord, setLookupWord] = useState("");
+  const [lookupResult, setLookupResult] = useState(null);
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupError, setLookupError] = useState("");
 
   useEffect(() => {
     fetch(`${API}/api/languages`)
@@ -102,6 +106,27 @@ export default function App() {
     window.print();
   };
 
+  const handleLookup = (e) => {
+    e.preventDefault();
+    setLookupError("");
+    setLookupResult(null);
+    const word = lookupWord.trim();
+    if (!lang || !word) return;
+    setLookupLoading(true);
+    fetch(`${API}/api/lookup?lang=${encodeURIComponent(lang)}&word=${encodeURIComponent(word)}`)
+      .then((r) => {
+        if (r.status === 404) return r.json().then((d) => ({ notFound: true, word: d.word || word }));
+        if (!r.ok) return r.json().then((d) => Promise.reject(new Error(d.error || "查询失败")));
+        return r.json();
+      })
+      .then((d) => {
+        if (d.notFound) setLookupResult("not_found");
+        else setLookupResult({ word: d.word, ipa: d.ipa });
+      })
+      .catch((err) => setLookupError(err.message || "查询失败，请重试"))
+      .finally(() => setLookupLoading(false));
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -134,8 +159,49 @@ export default function App() {
             <span className="hint">无可用音标库。</span>
           )}
         </div>
+        <div className="form-row lookup-row">
+          <label htmlFor="lookup-word">查询音标</label>
+          <div className="lookup-inline">
+            <input
+              id="lookup-word"
+              type="text"
+              value={lookupWord}
+              onChange={(e) => setLookupWord(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleLookup(e);
+                }
+              }}
+              placeholder="输入单词查询"
+              disabled={!languages.length}
+              className="lookup-input"
+            />
+            <button
+              type="button"
+              className="btn btn-lookup"
+              onClick={handleLookup}
+              disabled={lookupLoading || !languages.length || !lookupWord.trim()}
+            >
+              {lookupLoading ? "查询中…" : "查询"}
+            </button>
+          </div>
+          {lookupResult && (
+            <div className="lookup-result">
+              {lookupResult === "not_found" ? (
+                <span className="lookup-not-found">未找到该词</span>
+              ) : (
+                <ruby className="lookup-ruby">
+                  {lookupResult.word}
+                  <rt>{lookupResult.ipa}</rt>
+                </ruby>
+              )}
+            </div>
+          )}
+          {lookupError && <span className="lookup-error">{lookupError}</span>}
+        </div>
         <div className="form-row">
-          <label htmlFor="text">文本</label>
+          <label htmlFor="text">段落标注</label>
           <textarea
             id="text"
             value={text}

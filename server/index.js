@@ -4,7 +4,7 @@ import morgan from "morgan";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { existsSync } from "fs";
-import { listLanguages } from "./dictLoader.js";
+import { listLanguages, getIpa } from "./dictLoader.js";
 import { annotate } from "./annotator.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -19,6 +19,23 @@ app.get("/api/languages", (_req, res) => {
     res.json({ languages });
   } catch (e) {
     res.status(500).json({ error: "Failed to list languages" });
+  }
+});
+
+app.get("/api/lookup", (req, res) => {
+  const lang = (req.query.lang || "").trim();
+  const word = (req.query.word || "").trim();
+  if (!lang) return res.status(400).json({ error: "Missing or invalid 'lang'" });
+  if (!word) return res.status(400).json({ error: "Missing or invalid 'word'" });
+  try {
+    const ipa = getIpa(lang, word);
+    if (ipa == null) return res.status(404).json({ error: "Word not found", word });
+    res.json({ word, ipa });
+  } catch (e) {
+    if (e.message?.startsWith("Dictionary not found")) {
+      return res.status(404).json({ error: e.message });
+    }
+    res.status(500).json({ error: "Lookup failed" });
   }
 });
 
